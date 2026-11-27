@@ -76,6 +76,30 @@ pool=0x8535a20e3e1f3030e95663229e38e3bb5ebecccd
   -block 26505573 -previous groklet-first.json > groklet-repeat.json
 ```
 
+## Mainnet example: why Digital minimalism received `CRITICAL`
+
+GoPlus reported `is_honeypot=1` for the Ethereum token `0x2e0acb60baae8fb4d478af12ec4e7d510d6d81c0` in both lookups on 2026-11-27 UTC. We tested the same Uniswap V2 pair with a fresh wallet at each block. The pair held only 0.000004463116057124 WETH at both heights, so each buy used **0.00000001 WETH** (10,000,000,000 wei). [Token](https://etherscan.io/token/0x2e0acb60baae8fb4d478af12ec4e7d510d6d81c0) · [Pool](https://etherscan.io/address/0xeb0d88e83c19aa1bb4510187009a083ef9f79d59) · [Live GoPlus lookup](https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses=0x2e0acb60baae8fb4d478af12ec4e7d510d6d81c0)
+
+| Fork block and recorded JSON | Buy and approve | Transfer to wallet | Sell 50% | Sell 100% | Transfer to pool | USDC/WETH round trip | Mark |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [26,505,541](examples/digital-minimalism-26505541.json) | Succeeded | Full credit | Reverted | Reverted | Reverted | Succeeded | WARNING |
+| [26,505,573](examples/digital-minimalism-26505573.json) | Succeeded | Full credit | Reverted | Reverted | Reverted | Succeeded | CRITICAL |
+
+Each wallet bought **2,148,503.021117748 tokens** and could send **1,074,251.510558874 tokens** to another wallet with zero measured tax. From separate snapshots of the approved balance, selling that same half or the entire purchase reverted despite positive router quotes. Sending the same half directly to the pair also reverted. On each fork, the same wallet and router successfully bought USDC and sold it back for WETH.
+
+The first observation earned `WARNING`. Passing it to the second run with `-previous` confirmed the same sell restriction 32 blocks later and produced `CRITICAL` with `confidence=repeated`. This mark applies to the tested pair and size. Both reverted sells have `tax_bps: null`, and GoPlus supplied no sell-tax value.
+
+To reproduce both reports, set `ETH_RPC_URL` to an Ethereum RPC that serves historical state at these heights.
+
+```sh
+token=0x2e0acb60baae8fb4d478af12ec4e7d510d6d81c0
+pool=0xeb0d88e83c19aa1bb4510187009a083ef9f79d59
+./erc20-check -token "$token" -pool "$pool" -amount-wei 10000000000 \
+  -block 26505541 > first.json
+./erc20-check -token "$token" -pool "$pool" -amount-wei 10000000000 \
+  -block 26505573 -previous first.json > repeat.json
+```
+
 ## How the measurements work
 
 1. Resolve the canonical factory pair for the selected Router02 route. Record chain, block hash, pool, path, wallet and input. Check a reference router quote before each trade.
