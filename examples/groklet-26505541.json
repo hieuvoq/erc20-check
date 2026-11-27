@@ -1,0 +1,108 @@
+{
+  "control_pool": "0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc",
+  "control_token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+  "chain_id": 1,
+  "token": "0x656bd1d70e24de09744b89ea0de468d831af5f55",
+  "pool": "0x8535a20e3e1f3030e95663229e38e3bb5ebecccd",
+  "router": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+  "buy_path": [
+    "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "0x656bd1d70e24de09744b89ea0de468d831af5f55"
+  ],
+  "input_wei": "100000000000",
+  "block": 26505541,
+  "block_hash": "0x7f10ea82ebd9ab42e0387e3ffb9b0a7c8e9d042a6931318f8f4464ee994b7a47",
+  "checked_at": "2026-11-27T09:25:51Z",
+  "fork_wallet": "0x0b5fc2d54e941dbdb14054823c7e6a1272900a3a",
+  "fork_recipient": "0xaee3b14d9b7f2c3bdc095c0f21ee12322e79ef59",
+  "legs": {
+    "approve": {
+      "status": "ok",
+      "nominal_raw": "469216589641039",
+      "tax_bps": null,
+      "fork_tx": "0x4aefd146a9847aa103ab5e068498777bf079f074c27ac2ab7f7dbfb9ba19bd8e"
+    },
+    "buy": {
+      "route_input_raw": "100000000000",
+      "quoted_out_raw": "469216589641039",
+      "actual_out_raw": "469216589641039",
+      "status": "ok",
+      "nominal_raw": "469216589641039",
+      "received_raw": "469216589641039",
+      "debited_raw": "469216589641039",
+      "tax_bps": 0,
+      "fork_tx": "0x374ebf763885d888fc80ccd156c3aba778d0cf2eb6dc75aecd4e3cc59835b85e"
+    },
+    "control_buy": {
+      "route_input_raw": "100000000000",
+      "quoted_out_raw": "172",
+      "actual_out_raw": "172",
+      "status": "ok",
+      "nominal_raw": "172",
+      "received_raw": "172",
+      "debited_raw": "172",
+      "tax_bps": 0,
+      "fork_tx": "0xa41f55583a089661016d3f68c56d702d25d04b53b6a7002bfaa9457fda9cfb74"
+    },
+    "control_roundtrip": {
+      "route_input_raw": "172",
+      "quoted_out_raw": "99010729087",
+      "actual_out_raw": "99010729087",
+      "status": "ok",
+      "nominal_raw": "172",
+      "received_raw": "172",
+      "debited_raw": "172",
+      "tax_bps": 0,
+      "fork_tx": "0x8a529257b1624851ef9470a700b56244aa3ae5d889c9c1503e3698700beb9352"
+    },
+    "pool_transfer": {
+      "status": "reverted",
+      "tax_bps": null,
+      "fork_tx": "0xdc2743bfae8102450a9123d02e79ac6e595087022d8b0306e7b08c9c5127f869",
+      "reason": "fork transaction reverted"
+    },
+    "sell_all": {
+      "route_input_raw": "469216589641039",
+      "quoted_out_raw": "99402010125",
+      "status": "reverted",
+      "tax_bps": null,
+      "fork_tx": "0x24c9cfac06fb833d5f5b1369a0f25cb7fd97a60c5a5be55985628037938d21ba",
+      "reason": "fork transaction reverted"
+    },
+    "sell_partial": {
+      "route_input_raw": "234608294820519",
+      "quoted_out_raw": "49747095455",
+      "status": "reverted",
+      "tax_bps": null,
+      "fork_tx": "0x1fa0812ed2a3114caffcb5d1e00fa0ca7a8f0fbfc499c7dbac5d8d74b4a104ad",
+      "reason": "fork transaction reverted"
+    },
+    "transfer": {
+      "status": "reverted",
+      "tax_bps": null,
+      "fork_tx": "0xb75ec577833da1b0de27d40d764f9542cd2eb96136546d43ffeafe038c6d78d2",
+      "reason": "fork transaction reverted"
+    }
+  },
+  "goplus": {
+    "status": "available",
+    "queried_at": "2026-11-27T09:26:28Z",
+    "fields": {
+      "buy_tax": "0",
+      "cannot_buy": "0",
+      "is_honeypot": "1",
+      "slippage_modifiable": "1",
+      "trading_cooldown": "1",
+      "transfer_pausable": "1"
+    }
+  },
+  "warning_bps": 1000,
+  "markLevel": "WARNING",
+  "behavior": "trade_anomaly",
+  "confidence": "observed",
+  "reasons": [
+    "sell_partial: reverted",
+    "sell_all: reverted",
+    "transfer: reverted"
+  ]
+}

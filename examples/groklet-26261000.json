@@ -1,0 +1,93 @@
+{
+  "chain_id": 1,
+  "token": "0x656bd1d70e24de09744b89ea0de468d831af5f55",
+  "pool": "0x8535a20e3e1f3030e95663229e38e3bb5ebecccd",
+  "router": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+  "buy_path": [
+    "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "0x656bd1d70e24de09744b89ea0de468d831af5f55"
+  ],
+  "input_wei": "10000000000000000",
+  "block": 26261000,
+  "block_hash": "0x6e194afbb78874687892e431177f45e1ce797e00506b1aa5dd54a63b9313da28",
+  "checked_at": "2026-11-27T09:25:13Z",
+  "fork_wallet": "0x5a8ac230d8feee63e8df7f1db2958e3212bf457b",
+  "fork_recipient": "0x55e0edf12abb6e80cb4bb7385a9fb56216b32e6b",
+  "legs": {
+    "approve": {
+      "status": "ok",
+      "nominal_raw": "16179541011586",
+      "tax_bps": null,
+      "fork_tx": "0xf1cdeb4382716300b57868714154cd90ad568c04d1fa6e889ec566ef7c49ca80"
+    },
+    "buy": {
+      "route_input_raw": "10000000000000000",
+      "quoted_out_raw": "16179541011586",
+      "actual_out_raw": "16179541011586",
+      "status": "ok",
+      "nominal_raw": "16179541011586",
+      "received_raw": "16179541011586",
+      "debited_raw": "16179541011586",
+      "tax_bps": 0,
+      "fork_tx": "0xef68c8e7c6e42eb8f3946f2a2354ba95dc95706a93221c6a1a68b77bdd2b007f"
+    },
+    "sell_all": {
+      "route_input_raw": "16179541011586",
+      "quoted_out_raw": "9940110927031160",
+      "actual_out_raw": "9940110927031160",
+      "status": "ok",
+      "nominal_raw": "16179541011586",
+      "received_raw": "16179541011586",
+      "debited_raw": "16179541011586",
+      "tax_bps": 0,
+      "fork_tx": "0xb40995386013396f3f98a08b026e96cc2b216e33696cc0e6e42f33c292827df6"
+    },
+    "sell_partial": {
+      "route_input_raw": "8089770505793",
+      "quoted_out_raw": "4970923654763328",
+      "actual_out_raw": "4970923654763328",
+      "status": "ok",
+      "nominal_raw": "8089770505793",
+      "received_raw": "8089770505793",
+      "debited_raw": "8089770505793",
+      "tax_bps": 0,
+      "fork_tx": "0xf1f7bf8e1fd4c036020fd8fe32f8e53ef4f5ea24f1a9e97e9d393e7d0a4b6a67"
+    },
+    "transfer": {
+      "status": "ok",
+      "nominal_raw": "8089770505793",
+      "received_raw": "8089770505793",
+      "debited_raw": "8089770505793",
+      "tax_bps": 0,
+      "fork_tx": "0x883bffc3dbac2b9abfae1f33a884d994cee4efc11d4a77205e3fe973ee90c822"
+    }
+  },
+  "goplus": {
+    "status": "available",
+    "queried_at": "2026-11-27T09:25:33Z",
+    "fields": {
+      "buy_tax": "0",
+      "cannot_buy": "0",
+      "is_honeypot": "1",
+      "slippage_modifiable": "1",
+      "trading_cooldown": "1",
+      "transfer_pausable": "1"
+    },
+    "disagreements": [
+      "GoPlus is_honeypot=1; local sell_all=ok"
+    ]
+  },
+  "previous": {
+    "block": 26253140,
+    "hash": "0xc3a5eaf5b646907f7da9396da5ae3b65cb6f915b320b0bb24e48b0e2aa40e83c",
+    "markLevel": "WARNING"
+  },
+  "warning_bps": 1000,
+  "markLevel": "WARNING",
+  "behavior": "normal_in_tested_scenario",
+  "confidence": "observed",
+  "reasons": [
+    "all tested legs completed with full recipient credit",
+    "GoPlus is_honeypot=1; local sell_all=ok"
+  ]
+}

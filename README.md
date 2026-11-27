@@ -50,6 +50,32 @@ To repeat the simulation, use an Ethereum RPC with historical state at this bloc
   -block 26505320 -amount-wei 10000000000000000
 ```
 
+## Mainnet example: why GROKLET received `WARNING`
+
+GoPlus returned `is_honeypot=1` for GROKLET (`0x656bd1d70e24de09744b89ea0de468d831af5f55`) on 2026-11-27 UTC. It supplied no value for `cannot_sell_all` or `sell_tax`. We tested its Uniswap V2 WETH pair with a fresh wallet per fork. Each sell started from the same approved post-buy balance, so “sell all” means the entire original purchase. [Pool](https://etherscan.io/address/0x8535a20e3e1f3030e95663229e38e3bb5ebecccd) · [Live GoPlus lookup](https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses=0x656bd1d70e24de09744b89ea0de468d831af5f55)
+
+| Fork block and recorded JSON | Buy input (WETH) | Sell 50% | Sell 100% | Wallet transfer | Mark |
+| --- | ---: | --- | --- | --- | --- |
+| [26,253,140](examples/groklet-26253140.json) | 0.01 | Sold, 0 bps | Sold, 0 bps | Succeeded | WARNING |
+| [26,261,000](examples/groklet-26261000.json) | 0.01 | Sold, 0 bps | Sold, 0 bps | Succeeded | WARNING |
+| [26,505,541](examples/groklet-26505541.json) | 0.0000001 | Reverted | Reverted | Reverted | WARNING |
+| [26,505,573](examples/groklet-26505573.json) | 0.0000001 | Reverted | Reverted | Reverted | WARNING |
+
+The two older forks returned WETH on both sales. Their `WARNING` records a disagreement between a successful full sale at a historical block and the GoPlus flag retrieved in November. At block 26,505,541 the pair held only 0.000053544165456953 WETH, so we reduced the buy to 0.0000001 WETH. The wallet received 469,216.589641039 GROKLET and approved the router. Router02 quoted positive WETH proceeds for both sizes, but both transactions reverted. A reverted transaction leaves the local sell tax unknown (`null`).
+
+**Why the two recent forks stay at `WARNING`.** At both blocks the buy and approval succeeded, both sells and the direct token transfer to the pool reverted, and the same wallet completed a USDC/WETH control round trip. The ordinary transfer to a second wallet also reverted both times. The `CRITICAL` rule requires that wallet transfer to succeed in both observations so the probe can distinguish a pool-specific restriction from a broader transfer failure. Both reports therefore record `trade_anomaly` with `observed` confidence, including the second run with `-previous`.
+
+To repeat the two recent observations with an archive-capable `ETH_RPC_URL`:
+
+```sh
+token=0x656bd1d70e24de09744b89ea0de468d831af5f55
+pool=0x8535a20e3e1f3030e95663229e38e3bb5ebecccd
+./erc20-check -token "$token" -pool "$pool" -amount-wei 100000000000 \
+  -block 26505541 > groklet-first.json
+./erc20-check -token "$token" -pool "$pool" -amount-wei 100000000000 \
+  -block 26505573 -previous groklet-first.json > groklet-repeat.json
+```
+
 ## How the measurements work
 
 1. Resolve the canonical factory pair for the selected Router02 route. Record chain, block hash, pool, path, wallet and input. Check a reference router quote before each trade.
