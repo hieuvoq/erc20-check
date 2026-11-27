@@ -10,15 +10,15 @@
   "input_wei": "10000000000000000",
   "block": 26505320,
   "block_hash": "0x4c3e060f27b2d34ff4c9d5389b54cb9f3f34a0b7a6ac7ce143e7c443cd9a1723",
-  "checked_at": "2026-11-27T08:38:19Z",
-  "fork_wallet": "0x6e06b46028900f83e12a1cc64766b64dbabb58eb",
-  "fork_recipient": "0x417b33c671a79c20116f00fd5b2826d97522b595",
+  "checked_at": "2026-11-27T09:15:24Z",
+  "fork_wallet": "0x3d42b03135a80824c16a904dbb935aa552c10496",
+  "fork_recipient": "0x18270cee9eda8cf88a607fa92ff56c60e94fb71b",
   "legs": {
     "approve": {
       "status": "ok",
       "nominal_raw": "1019531713455815",
       "tax_bps": null,
-      "fork_tx": "0x9d6f11d0a0401ddc529814a5c1057ce2a86478477b84fe563af791667f980ad4"
+      "fork_tx": "0xeff241fa61761dee2113cae0e0b3f19d658b3289531f4c9fa4662750a9340e6d"
     },
     "buy": {
       "route_input_raw": "10000000000000000",
@@ -29,23 +29,39 @@
       "received_raw": "1019531713455815",
       "debited_raw": "1022599511991790",
       "tax_bps": 29,
-      "fork_tx": "0x63c6e9cc5a5e342db217f34e7994b0c2467540f6a5beac5f8301af027ca7331e"
+      "fork_tx": "0x4205ca31188a7de4cb03e71d5796624a4463eb3eb3eb28fa7e0a84807c61214b"
     },
     "sell_all": {
+      "multi_swap_attribution": {
+        "pair_swap_count": 2,
+        "seller_swap_receipt_offset": 22,
+        "pool_net_change_raw": "1503208226265433"
+      },
       "route_input_raw": "1019531713455815",
       "quoted_out_raw": "9910270330920505",
-      "status": "unknown",
-      "tax_bps": null,
-      "fork_tx": "0xbdf3b716c88633979a8b22594029aa7afc6cdd574c3992d976302344ff03177d",
-      "reason": "ambiguous pair Swap events"
+      "actual_out_raw": "9880482770829067",
+      "status": "ok",
+      "nominal_raw": "1019531713455815",
+      "received_raw": "1016473118315448",
+      "debited_raw": "1019531713455815",
+      "tax_bps": 29,
+      "fork_tx": "0x6f72f47c4a058b7e5769862a67e273b44340ec878bf3bd59040ad8de37ba6747"
     },
     "sell_partial": {
+      "multi_swap_attribution": {
+        "pair_swap_count": 2,
+        "seller_swap_receipt_offset": 22,
+        "pool_net_change_raw": "994971667107709"
+      },
       "route_input_raw": "509765856727907",
       "quoted_out_raw": "4955151757699920",
-      "status": "unknown",
-      "tax_bps": null,
-      "fork_tx": "0xf5ca1abb9e3a33484888e1d055e2cdfbc45531688cb36e9cc255c0d9dbe98778",
-      "reason": "ambiguous pair Swap events"
+      "actual_out_raw": "4940257878102648",
+      "status": "ok",
+      "nominal_raw": "509765856727907",
+      "received_raw": "508236559157724",
+      "debited_raw": "509765856727907",
+      "tax_bps": 29,
+      "fork_tx": "0xe3ae43f3987f7c2017a36f0579e151ff136359ea0002b0b45c7f1d7cec120091"
     },
     "transfer": {
       "status": "ok",
@@ -53,12 +69,12 @@
       "received_raw": "509765856727907",
       "debited_raw": "509765856727907",
       "tax_bps": 0,
-      "fork_tx": "0x85c742a763c94b5c068f4d14a772430c103bbfbe33cf1a0aea5420b4694f421c"
+      "fork_tx": "0x3564bca26c1e05526d1e3b7dcb3fb83edd39ecc5670657007c14f0aed4aa8ee5"
     }
   },
   "goplus": {
     "status": "available",
-    "queried_at": "2026-11-27T08:38:47Z",
+    "queried_at": "2026-11-27T09:15:55Z",
     "fields": {
       "buy_tax": "0.003",
       "cannot_buy": "0",
@@ -73,11 +89,11 @@
   },
   "warning_bps": 1000,
   "markLevel": "NOTICE",
-  "behavior": "fee_observed_partial_coverage",
+  "behavior": "fee_on_transfer",
   "confidence": "observed",
   "reasons": [
     "buy: recipient received 1019531713455815 of 1022599511991790 raw units",
-    "sell_partial: unknown",
-    "sell_all: unknown"
+    "sell_partial: recipient received 508236559157724 of 509765856727907 raw units",
+    "sell_all: recipient received 1016473118315448 of 1019531713455815 raw units"
   ]
 }

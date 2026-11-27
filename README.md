@@ -31,14 +31,16 @@ The CLI writes transactions only through a private Unix socket to its own Anvil 
 
 At Ethereum block **26,505,320**, the CLI spent **0.01 fork ETH** buying FLOKI through the FLOKI/WETH pair. The pool sent **1,022,599.511991790 FLOKI** and the wallet received **1,019,531.713455815 FLOKI**. The difference of **3,067.798535975 FLOKI** is the measured buy fee. [Pool](https://etherscan.io/address/0xca7c2771d248dcbe09eabe0ce57a62e18da178c0) · [Block](https://etherscan.io/block/26505320) · [Recorded JSON](examples/floki-mainnet.json)
 
-| Leg | Fork measurement | GoPlus at 2026-11-27 08:38:47 UTC |
-| --- | --- | --- |
-| Buy | ≈0.30% (29 whole bps after flooring) | 0.30% |
-| Sell half | Unknown · multiple `Swap` events from the pair | 0.30% |
-| Sell all | Unknown · multiple `Swap` events from the pair | 0.30% |
-| Wallet transfer | 0% · recipient received all 509,765.856727907 FLOKI | 0% |
+| Leg | FLOKI debited | FLOKI credited to recipient | Local tax | GoPlus tax |
+| --- | ---: | ---: | ---: | ---: |
+| Buy | 1,022,599.511991790 | 1,019,531.713455815 | ≈0.30% | 0.30% |
+| Sell half | 509,765.856727907 | 508,236.559157724 | ≈0.30% | 0.30% |
+| Sell all | 1,019,531.713455815 | 1,016,473.118315448 | ≈0.30% | 0.30% |
+| Wallet transfer | 509,765.856727907 | 509,765.856727907 | 0% | 0% |
 
-**Why this mark?** The buy shortfall proves a fee below the default 1,000 bps warning threshold. The raw fraction is just under 30 bps and the CLI floors it to 29. That is within the one-basis-point comparison tolerance. Both sell receipts contained multiple swaps from the same pair, so the CLI could not attribute a fee to the seller and left both local rates null. The resulting behavior is `fee_observed_partial_coverage`. GoPlus's sell figure is a separate token-level observation.
+Each sell receipt contains two swaps from the same pair and a liquidity addition. On the full sale the pool gained **1,503,208.226265433 FLOKI** across the entire transaction. The seller contributed **1,016,473.118315448 FLOKI** to the swap that paid WETH to the test wallet. The JSON records the selected swap's zero-based receipt offset and the total pool change for both sales.
+
+**Why `NOTICE`?** Both sells succeeded. The measured buy and sell fees are just under 30 bps, which the CLI floors to 29 whole bps. GoPlus reported 30 bps for both and zero for transfers when queried at **2026-11-27 09:15:55 UTC**. The difference is within the 1 bps comparison tolerance, and the fees are below the 1,000 bps warning threshold. All tested legs completed, giving the behavior `fee_on_transfer`.
 
 To repeat the simulation, use an Ethereum RPC with historical state at this block:
 
@@ -53,7 +55,7 @@ To repeat the simulation, use an Ethereum RPC with historical state at this bloc
 1. Resolve the canonical factory pair for the selected Router02 route. Record chain, block hash, pool, path, wallet and input. Check a reference router quote before each trade.
 2. Buy the token with Router02's fee-on-transfer-compatible swap. Read the target pair's nominal output from its Swap event, verify the pool's token debit, and measure the recipient's balance increase.
 3. From the post-buy wallet balance, test an ordinary wallet-to-wallet transfer. Approve the router and read back the allowance. Sell half and sell the entire position in separate snapshots of the same approved state. Each successful sale must credit the wallet with wrapped native proceeds.
-4. For each sale, compare the wallet debit with the pair's token credit and verify that credit against the pair's Swap event. For a wallet transfer, compare the nominal amount with both wallet balance changes.
+4. For a single-swap sale, verify the pool balance delta against the swap input. For multiple swaps on the target pair, identify a unique swap by the router, output recipient and trade direction. Match its input to wallet-to-pool transfers in that reserve interval (bounded by V2 `Sync` events), and reconcile all target-token transfers involving the pool with its observed balance change. Ambiguous or inconsistent evidence leaves the sell tax unknown. For a wallet transfer, compare the nominal amount with both wallet balance changes.
 
 For a measurable recipient-side tax, `tax_bps = floor(10000 × (nominal − received) / nominal)`. Raw amounts preserve the precision hidden by integer bps. On a sale, `received_raw` is the **target token credited to the pool**. `actual_out_raw` is the **WETH received by the seller**. On a buy, `actual_out_raw` is the purchased token. The report also records `quoted_out_raw` in the same output asset. This keeps the token tax separate from pool fees and price impact.
 

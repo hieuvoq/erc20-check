@@ -6,17 +6,23 @@ import (
 	"math/big"
 )
 
+type SellAttribution struct {
+	PairSwaps  int    `json:"pair_swap_count"`
+	SwapOffset int    `json:"seller_swap_receipt_offset"`
+	PoolDelta  string `json:"pool_net_change_raw"`
+}
 type Leg struct {
-	Input     string `json:"route_input_raw,omitempty"`
-	QuoteOut  string `json:"quoted_out_raw,omitempty"`
-	ActualOut string `json:"actual_out_raw,omitempty"`
-	Status    string `json:"status"`
-	Sent      string `json:"nominal_raw,omitempty"`
-	Received  string `json:"received_raw,omitempty"`
-	Debited   string `json:"debited_raw,omitempty"`
-	TaxBPS    *int64 `json:"tax_bps"`
-	Tx        string `json:"fork_tx,omitempty"`
-	Reason    string `json:"reason,omitempty"`
+	Attribution *SellAttribution `json:"multi_swap_attribution,omitempty"`
+	Input       string           `json:"route_input_raw,omitempty"`
+	QuoteOut    string           `json:"quoted_out_raw,omitempty"`
+	ActualOut   string           `json:"actual_out_raw,omitempty"`
+	Status      string           `json:"status"`
+	Sent        string           `json:"nominal_raw,omitempty"`
+	Received    string           `json:"received_raw,omitempty"`
+	Debited     string           `json:"debited_raw,omitempty"`
+	TaxBPS      *int64           `json:"tax_bps"`
+	Tx          string           `json:"fork_tx,omitempty"`
+	Reason      string           `json:"reason,omitempty"`
 }
 type Prior struct {
 	Block uint64 `json:"block"`

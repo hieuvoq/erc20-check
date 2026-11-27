@@ -8,9 +8,9 @@ import (
 
 type market struct {
 	node
-	router, pool, token, wallet, recipient string
-	path                                   []string
-	side                                   int
+	router, pool, token, wallet, recipient, sellTo string
+	path                                           []string
+	side                                           int
 }
 
 func (n node) market(router, token, quote, wallet, recipient string) (market, error) {
@@ -30,7 +30,16 @@ func (n node) market(router, token, quote, wallet, recipient string) (market, er
 		return m, errors.New("target must differ from wrapped native and quote asset")
 	}
 	m.path = []string{weth}
+	m.sellTo = wallet
 	if quote != weth {
+		// On a reverse two-hop route, Router02 sends the first output to the next pair.
+		m.sellTo, err = n.address(factory, "0xe6a43905"+addr(quote)+addr(weth))
+		if err != nil {
+			return m, err
+		}
+		if m.sellTo == zero {
+			return m, errors.New("factory has no quote/WETH pair")
+		}
 		m.path = append(m.path, quote)
 	}
 	m.path = append(m.path, token)
@@ -135,19 +144,23 @@ func (m market) trade(buy bool, amount *big.Int) (result Leg) {
 	if err != nil {
 		return failed(h, err)
 	}
-	event, err := pairSwap(rec, m.pool)
+	swaps, err := pairSwaps(rec, m.pool)
 	if err != nil {
 		return failed(h, err)
 	}
 	if buy {
+		if len(swaps) != 1 {
+			return failed(h, errors.New("ambiguous pair Swap events on buy"))
+		}
 		out := new(big.Int).Sub(after, wallet)
-		result = measure(event[m.side+2], new(big.Int).Sub(pair, pairAfter), out, h)
+		result = measure(swaps[0].amounts[m.side+2], new(big.Int).Sub(pair, pairAfter), out, h)
 		result.ActualOut = out.String()
 		return result
 	}
-	credit := new(big.Int).Sub(pairAfter, pair)
-	if event[m.side].Cmp(credit) != 0 {
-		return failed(h, errors.New("pair swap input differs from balance delta"))
+	poolDelta := new(big.Int).Sub(pairAfter, pair)
+	credit, attribution, err := m.sellCredit(rec, swaps, poolDelta)
+	if err != nil {
+		return failed(h, err)
 	}
 	proceeds, err := m.balance(path[len(path)-1], m.wallet)
 	if err != nil {
@@ -158,6 +171,7 @@ func (m market) trade(buy bool, amount *big.Int) (result Leg) {
 		return failed(h, errors.New("sell receipt succeeded but wallet received no wrapped native proceeds"))
 	}
 	result = measure(amount, new(big.Int).Sub(wallet, after), credit, h)
+	result.Attribution = attribution
 	result.ActualOut = out.String()
 	return result
 }

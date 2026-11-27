@@ -145,23 +145,4 @@ func reverse(path []string) []string {
 	}
 	return r
 }
-func pairSwap(rec receipt, pair string) ([]*big.Int, error) {
-	var result []*big.Int
-	for _, l := range rec.Logs {
-		if strings.EqualFold(l.Address, pair) && len(l.Topics) > 0 && strings.EqualFold(l.Topics[0], swapTopic) {
-			if result != nil {
-				return nil, errors.New("ambiguous pair Swap events")
-			}
-			var err error
-			result, err = words(l.Data, 4)
-			if err != nil {
-				return nil, err
-			}
-		}
-	}
-	if result == nil {
-		return nil, errors.New("missing pair Swap event")
-	}
-	return result, nil
-}
 func now() string { return time.Now().UTC().Format(time.RFC3339) }
