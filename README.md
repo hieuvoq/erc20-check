@@ -27,6 +27,27 @@ A recorded run at block **26,505,256** spent 0.01 fork ETH and received **17.270
 
 The CLI writes transactions only through a private Unix socket to its own Anvil child. The child uses fresh funded accounts and exits after the scan. Fork transaction hashes refer to that simulation. Use `-block` to repeat the market snapshot. New scans use a fresh wallet and can observe different behavior for address-dependent tokens.
 
+## Mainnet example: why FLOKI received `NOTICE`
+
+At Ethereum block **26,505,320**, the CLI spent **0.01 fork ETH** buying FLOKI through the FLOKI/WETH pair. The pool sent **1,022,599.511991790 FLOKI** and the wallet received **1,019,531.713455815 FLOKI**. The difference of **3,067.798535975 FLOKI** is the measured buy fee. [Pool](https://etherscan.io/address/0xca7c2771d248dcbe09eabe0ce57a62e18da178c0) · [Block](https://etherscan.io/block/26505320) · [Recorded JSON](examples/floki-mainnet.json)
+
+| Leg | Fork measurement | GoPlus at 2026-11-27 08:38:47 UTC |
+| --- | --- | --- |
+| Buy | ≈0.30% (29 whole bps after flooring) | 0.30% |
+| Sell half | Unknown · multiple `Swap` events from the pair | 0.30% |
+| Sell all | Unknown · multiple `Swap` events from the pair | 0.30% |
+| Wallet transfer | 0% · recipient received all 509,765.856727907 FLOKI | 0% |
+
+**Why this mark?** The buy shortfall proves a fee below the default 1,000 bps warning threshold. The raw fraction is just under 30 bps and the CLI floors it to 29. That is within the one-basis-point comparison tolerance. Both sell receipts contained multiple swaps from the same pair, so the CLI could not attribute a fee to the seller and left both local rates null. The resulting behavior is `fee_observed_partial_coverage`. GoPlus's sell figure is a separate token-level observation.
+
+To repeat the simulation, use an Ethereum RPC with historical state at this block:
+
+```sh
+./erc20-check -token 0xcf0c122c6b73ff809c693db761e7baebe62b6a2e \
+  -pool 0xca7c2771d248dcbe09eabe0ce57a62e18da178c0 \
+  -block 26505320 -amount-wei 10000000000000000
+```
+
 ## How the measurements work
 
 1. Resolve the canonical factory pair for the selected Router02 route. Record chain, block hash, pool, path, wallet and input. Check a reference router quote before each trade.
