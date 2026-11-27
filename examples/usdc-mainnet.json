@@ -1,0 +1,82 @@
+{
+  "chain_id": 1,
+  "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+  "pool": "0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc",
+  "router": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+  "buy_path": [
+    "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+  ],
+  "input_wei": "10000000000000000",
+  "block": 26505256,
+  "block_hash": "0x56748f426373deeb1bf30ec41a758cfedd170b78a760d785f2216cc93e4dc044",
+  "checked_at": "2026-11-27T08:25:41Z",
+  "fork_wallet": "0x43194fd5588e3661e97e037a796ade7c03d29981",
+  "fork_recipient": "0xa5bbd76a97182487d6cc4c5c9c5d2a505a768cbc",
+  "legs": {
+    "approve": {
+      "status": "ok",
+      "nominal_raw": "17270304",
+      "tax_bps": null,
+      "fork_tx": "0xe0b68e256a67b93efa4420add47ef3cbc14732177e27dffca879606008e1a5fa"
+    },
+    "buy": {
+      "route_input_raw": "10000000000000000",
+      "quoted_out_raw": "17270304",
+      "actual_out_raw": "17270304",
+      "status": "ok",
+      "nominal_raw": "17270304",
+      "received_raw": "17270304",
+      "debited_raw": "17270304",
+      "tax_bps": 0,
+      "fork_tx": "0x9567827f55851f09b05feda78ffa81f393d5dfa91765989ac18c5f377b6d1a2f"
+    },
+    "sell_all": {
+      "route_input_raw": "17270304",
+      "quoted_out_raw": "9940089823843826",
+      "actual_out_raw": "9940089823843826",
+      "status": "ok",
+      "nominal_raw": "17270304",
+      "received_raw": "17270304",
+      "debited_raw": "17270304",
+      "tax_bps": 0,
+      "fork_tx": "0x01a841e1b8b46cbd10f608edd42530076c4e6822517410393d7dedcc9b2816d7"
+    },
+    "sell_partial": {
+      "route_input_raw": "8635152",
+      "quoted_out_raw": "4970049968258200",
+      "actual_out_raw": "4970049968258200",
+      "status": "ok",
+      "nominal_raw": "8635152",
+      "received_raw": "8635152",
+      "debited_raw": "8635152",
+      "tax_bps": 0,
+      "fork_tx": "0xb30629ce0980a17614c2134556a05a4d621a23a1eb4ed387ed7d8ca79402efdd"
+    },
+    "transfer": {
+      "status": "ok",
+      "nominal_raw": "8635152",
+      "received_raw": "8635152",
+      "debited_raw": "8635152",
+      "tax_bps": 0,
+      "fork_tx": "0x0245773f3b28386c8a31f1b76bc3a1cfac5c60e1ff3fa07487ee09a02b5b9286"
+    }
+  },
+  "goplus": {
+    "status": "available",
+    "queried_at": "2026-11-27T08:25:53Z",
+    "fields": {
+      "buy_tax": "0",
+      "cannot_buy": "0",
+      "is_honeypot": "0",
+      "sell_tax": "0"
+    }
+  },
+  "warning_bps": 1000,
+  "markLevel": "NORMAL",
+  "behavior": "normal_in_tested_scenario",
+  "confidence": "observed",
+  "reasons": [
+    "all tested legs completed with full recipient credit"
+  ]
+}

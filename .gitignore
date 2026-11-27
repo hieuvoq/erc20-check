@@ -1,0 +1,4 @@
+/erc20-check
+/demo/node_modules/
+/demo/out/
+.env
